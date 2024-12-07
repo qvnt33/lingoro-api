@@ -13,12 +13,9 @@ class VocabularyViewSet(ModelViewSet):
     serializer_class = VocabularySerializer
 
 
-
-
 class WordPairViewSet(ModelViewSet):
     queryset = WordPair.objects.all()
     serializer_class = WordPairSerializer
-
 
 
 class TranslationViewSet(ModelViewSet):
