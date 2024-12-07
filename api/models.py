@@ -18,6 +18,11 @@ class Vocabulary(models.Model):
 
     created_at = models.DateField(auto_now_add=True)
 
+    def save(self, *args, **kwargs) -> None:
+        if not self.description:  # Перевірка на пустий рядок
+            self.description = None  # Перетворення на NULL
+        super().save(*args, **kwargs)  # Виклик базового методу save()
+
     def __str__(self) -> str:
         return self.name
 
@@ -29,13 +34,14 @@ class WordPair(models.Model):
 
     number_errors = models.IntegerField(default=0)
 
+    def save(self, *args, **kwargs) -> None:
+        if not self.annotation:  # Перевірка на пустий рядок
+            self.annotation = None  # Перетворення на NULL
+        super().save(*args, **kwargs)  # Виклик базового методу save()
+
     def __str__(self) -> str:
-        translations = self.translations.all()
-        if translations.exists():
-            formatted_translations: str = ', '.join(t.translation for t in translations)
-        else:
-            formatted_translations: str = 'Немає перекладу'
-        return f'{self.word} -> {formatted_translations}'
+        formatted_translations: str = ', '.join(t.translation for t in self.translations.all() if t.translation)
+        return f'{self.word} -> {formatted_translations or "Немає перекладу"}'
 
 
 class Translation(models.Model):
@@ -43,6 +49,11 @@ class Translation(models.Model):
     transcription = models.CharField(max_length=100, blank=True, null=True)
 
     word_pair = models.ForeignKey(WordPair, related_name='translations', on_delete=models.CASCADE)
+
+    def save(self, *args, **kwargs) -> None:
+        if not self.transcription:  # Перевірка на пустий рядок
+            self.transcription = None  # Перетворення на NULL
+        super().save(*args, **kwargs)  # Виклик базового методу save()
 
     def __str__(self) -> str:
         return f'{self.translation} (for "{self.word_pair.word}")'
