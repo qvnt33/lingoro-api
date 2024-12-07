@@ -3,7 +3,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter
 from rest_framework.viewsets import ModelViewSet
 
-from api.filters import VocabularyFilter, WordPairFilter
+from api.filters import VocabularyFilter, WordPairFilter, TranslationFilter
 from api.models import Translation, User, Vocabulary, WordPair
 from api.serializers import TranslationSerializer, UserSerializer, VocabularySerializer, WordPairSerializer
 
@@ -44,7 +44,8 @@ class TranslationViewSet(ModelViewSet):
     queryset: BaseManager[Translation] = Translation.objects.all()
     serializer_class = TranslationSerializer
 
-    filter_backends: list = [OrderingFilter]  # Додаємо фільтрування
+    filter_backends: list = [DjangoFilterBackend, OrderingFilter]  # Додаємо фільтрування
+    filterset_class = TranslationFilter  # Прив'язуємо фільтр до ViewSet
 
     ordering_fields = ['id']  # Сортування за всіма полями
     ordering = ['id']  # Сортування за замовчуванням

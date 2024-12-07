@@ -1,6 +1,6 @@
 from django_filters import rest_framework as filters
 
-from api.models import Vocabulary, WordPair
+from api.models import Translation, Vocabulary, WordPair
 
 
 class VocabularyFilter(filters.FilterSet):
@@ -11,9 +11,15 @@ class VocabularyFilter(filters.FilterSet):
         exclude=True,  # Перевертаємо логіку: True = є, False = немає
     )
 
+    # Фільтр по user_id користувача
+    user_id = filters.NumberFilter(
+        field_name='user',
+        lookup_expr='exact',
+    )
+
     class Meta:
         model = Vocabulary
-        fields: list[str] = ['has_description']  # Додаємо поле для фільтрації
+        fields: list[str] = ['has_description', 'user_id']  # Додаємо поле для фільтрації
 
 
 class WordPairFilter(filters.FilterSet):
@@ -24,6 +30,24 @@ class WordPairFilter(filters.FilterSet):
         exclude=True,  # Перевертаємо логіку: True = є, False = немає
     )
 
+    # Фільтр по vocab_id словника
+    vocab_id = filters.NumberFilter(
+        field_name='vocab',
+        lookup_expr='exact',
+    )
+
     class Meta:
         model = WordPair
-        fields: list[str] = ['has_annotation']  # Додаємо поле для фільтрації
+        fields: list[str] = ['has_annotation', 'vocab_id']  # Додаємо поле для фільтрації
+
+
+class TranslationFilter(filters.FilterSet):
+    # Фільтр по wordpair_id словникової пари
+    wordpair_id = filters.NumberFilter(
+        field_name='word_pair',
+        lookup_expr='exact',
+    )
+
+    class Meta:
+        model = Translation
+        fields: list[str] = ['wordpair_id']  # Додаємо поле для фільтрації
