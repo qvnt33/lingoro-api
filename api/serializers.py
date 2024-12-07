@@ -1,5 +1,6 @@
-from .models import Translation, User, Vocabulary, WordPair
 from rest_framework import serializers
+
+from api.models import Translation, User, Vocabulary, WordPair
 
 
 class UserSerializer(serializers.ModelSerializer):
