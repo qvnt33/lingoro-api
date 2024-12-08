@@ -3,7 +3,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter
 from rest_framework.viewsets import ModelViewSet
 
-from api.filters import VocabularyFilter, WordPairFilter, TranslationFilter
+from api.filters import TranslationFilter, VocabularyFilter, WordPairFilter
 from api.models import Translation, User, Vocabulary, WordPair
 from api.serializers import TranslationSerializer, UserSerializer, VocabularySerializer, WordPairSerializer
 
